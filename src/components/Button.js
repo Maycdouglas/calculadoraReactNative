@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, Dimensions, TouchableHighlight } from 'react-native';
 
+//TouchableHighloght é um componente que permite que eu crie um novo componente com funcionamento de botao
+
 const styles = StyleSheet.create({
     button: {
         fontSize: 40,
@@ -16,7 +18,7 @@ const styles = StyleSheet.create({
 
 export default props => {
     return (
-        <TouchableHighlight onPress={props.onClick}>
+        <TouchableHighlight onPress={props.onClick}> 
             <Text style={styles.button}>{props.label}</Text>
         </TouchableHighlight>
     )
