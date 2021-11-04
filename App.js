@@ -15,18 +15,17 @@ const initialState = {
 export default function App() {
 
   const [estadoAtual, setEstadoAtual] = useState({...initialState})
-  const [nome, setNome] = useState('Maycon')
 
   addDigit = n => {
-
-    //verifica se o ponto já nao foi utilizado no numero
-    if(n === '.' && estadoAtual.displayValue.includes('.')) {
-      return
-    }
 
     //responsável por limpar o display caso tenha apenas o 0 ou a variavel esteja verdadeira
     const clearDisplay = estadoAtual.displayValue === '0'
       || estadoAtual.clearDisplay
+
+     //verifica se o ponto já nao foi utilizado no numero
+     if(n === '.' && !clearDisplay && estadoAtual.displayValue.includes('.')) {
+      return
+    }
 
     //responsavel por verificar se o display deve ser limpo ou utilizar o valor
     const currentValue = clearDisplay ? '' : estadoAtual.displayValue
@@ -34,8 +33,8 @@ export default function App() {
     //concatena os valores
     const displayValue = currentValue + n
 
-    setNome('Douglas')
     
+
     if(n !== '.') {
       const newValue = parseFloat(displayValue)
       const values = [...estadoAtual.values]
@@ -52,7 +51,27 @@ export default function App() {
   }
 
   const setOperation = operation => {
-
+    if(estadoAtual.current === 0){
+      setEstadoAtual({...estadoAtual, operation, current: 1, clearDisplay: true })
+    } else {
+      const equals = operation === '='
+      const values = [...estadoAtual.values]
+      try {
+        values[0] = eval(`${values[0]} ${estadoAtual.operation} ${values[1]}`)
+      } catch (e) {
+        values[0] = estadoAtual.values[0]
+      }
+      
+      values[1] = 0
+      setEstadoAtual({
+        ...estadoAtual, 
+        displayValue: `${values[0]}`, 
+        operation: equals ? null : operation,
+        current: equals ? 0 : 1,
+        clearDisplay: !equals,
+        values: values
+      })
+    }
   }
 
   return (
